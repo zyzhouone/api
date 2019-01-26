@@ -1,0 +1,220 @@
+﻿@using Utls;
+@using Model;
+
+@{
+    ViewBag.Title = "录入队员信息";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model tblline
+
+
+@section PageSpecificStyleSheetIncludes{
+<style>
+     *{font-family: "微软雅黑";font-size: 16px}
+    .banner{height: 149px;background-color: #229fe6;text-align: center}
+
+    .nav{height: 48px;background-color: #145976;text-align: center;}
+    .nav ul{list-style-type: none;text-align: center;margin-left: 10%}
+    .nav ul li{float: left;font-size: 1.2em;line-height: 48px;color: #ffffff;margin: 0 15px}
+    .nav ul li a{padding: 0 15px;color: #ffffff;text-decoration: none}
+    .nav ul li:hover{background-color: #b23232}
+
+    .content{background-color: #ffffff;height: 100%}
+    .content .bor{border: 1px solid #bcbcbc;border-radius: 15px;padding: 50px 10px;margin: 30px}
+    .content h3{text-align: center;margin: 20px auto !important;}
+    .content h5{color: red}
+    .content h5{margin-left: 30%}
+    .content p{margin-left: 30%}
+    .content .form-group{margin: 15px auto}
+    .content .form-group input{display: inline}
+    .content .form-control{width: 200px}
+    .content .next{width: 360px}
+    .content .space{height: 30px}
+    .message{width: 100%;padding: 30px 10%}
+    .name{width: 120px!important;}
+    .sex{width: 65px!important;}
+    .idcard{width: 105px !important;}
+    .content .form-btn{margin: 20px 45%}
+
+
+    .foot{height: 150px;background-color: #229fe6;text-align: center;padding: 20px 0;color: #ffffff}
+</style>
+}
+
+@section PageSpecificJavascriptIncludes{
+    <script type="text/javascript">
+
+        $(function () {
+
+            $("#nbtn").click(function () {
+
+                var dt = "";
+                var error = false;
+
+                $(".form-inline").each(function () {
+
+                    var tmp = "";
+                    var leader = 0;
+                    $(this).find('input,select').each(function () {
+                        var id = this.id;
+                        var value = $(this).val();
+
+                        if (id.indexOf("ld_") == 0)
+                            leader = 1;
+
+                        //姓名
+                        if (id.indexOf("_name") > 0) {
+                            if (value == '') {
+                                jNotify('请输入姓名', { VerticalPosition: "center" });
+                                this.focus();
+                                error = true;
+                                return false;
+                            }
+                        }
+                        //
+                        else if (id.indexOf("_cardtype") > 0) {
+                            if (value == '1') {
+                                var vl = $("#" + id.substr(0, id.length - 4)).val();
+                                var pattern = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+                                if (!pattern.test(vl)) {
+                                    jNotify('请检查身份证号码是否正确', { VerticalPosition: "center" });
+                                    $("#" + id.substr(0, id.length - 3)).focus();
+                                    error = true;
+                                    return false;
+                                }
+                            }
+                            else {
+                                //检查输入生日
+
+                            }
+                        }
+                        else if (id.indexOf("_mobile") > 0) {
+
+                            var isMobile = /^(?:13\d|15\d)\d{5}(\d{3}|\*{3})$/;
+                            if (!isMobile.test(value)) {
+                                jNotify('请检查手机号码是否正确', { VerticalPosition: "center" });
+                                this.focus();
+                                error = true;
+                                return false;
+                            }
+                        }
+
+                        tmp = tmp + "\"" + this.name + "\":\"" + value + "\",";
+                    });
+
+                    dt = dt + "{" + tmp + "\"Leader\":" + leader + "},";
+                });
+
+                if (error)
+                    return;
+
+                dt = "[" + dt.substr(0, dt.length - 1) + "]";
+
+                //var p = $.parseJSON(dt);
+
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: "/enter/inputmb?tid=" + $("#htid").val(),
+                    data: dt,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.Code != 0) {
+                            jError(data.Message);
+                        }
+                        else {
+                            //window.location.href = "/enter/step4?id=" + $("#htid").val();
+                            jSuccess("ok");
+                        }
+                    }
+                });
+            });
+        });
+   </script>
+}
+
+<input id="htid" type="hidden" value="@ViewBag.tid"/>
+
+ <div class="content">
+        <div class="container" id="ctner">
+            <div class="bor">
+                <h3>第四步：批量录入队员信息</h3>
+                <div class="message">
+                    队长
+                    <hr>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control name" placeholder="请输入姓名" id="ld_name" name="Nickname">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control sex"  id="ld_sex" name="Sexy">
+                               <option value="1" selected=selected>男</option>
+                                <option value="2">女</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control idcard"  id="ld_cardtype" name="Cardtype">
+                                <option value="1" selected=selected>身份证</option>
+                                <option value="2">护照</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="请输入证件号码"  id="ld_card" name="Cardno">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="手机号码"  id="ld_mobile" name="Mobile">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="护照请填写生日"  id="ld_hz" name="Pnov">
+                        </div>
+                    </div>
+
+@{
+    var cnt = Model.Players - 1;
+
+     <span>队员</span>
+     <hr>
+                    
+    for (int i = 0; i < cnt; i++)
+    {
+        <div class="form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control name" placeholder="请输入姓名" id="mb_@(i)_name" name="Nickname">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control sex"  id="mb_@(i)_sex" name="Sexy">
+                                <option value="1" selected=selected>男</option>
+                                <option value="2">女</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control idcard" id="mb_@(i)_cardtype" name="Cardtype">
+                                <option value="1" selected=selected>身份证</option>
+                                <option value="2">护照</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="请输入证件号码" id="mb_@(i)_card" name="Cardno">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="手机号码" id="mb_@(i)_mobile" name="Mobile">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="护照请填写生日" id="mb_@(i)_hz"  name="Pnov">
+                        </div>
+                    </div>
+    }    
+}                    
+                </div><div class="form-group form-btn">
+                    <button type="button" class="btn btn-primary" id="nbtn">确认提交</button>
+                </div>
+            </div>
+
+            @*  <div class="form-group">
+                    <button class="btn btn-warning next" onclick="javascript:window.history.go(-1);">返 回</button>
+                    <button class="btn btn-success next" type="button" id="nbtn">完成</button>
+                </div>*@
+
+        </div>
+    </div>

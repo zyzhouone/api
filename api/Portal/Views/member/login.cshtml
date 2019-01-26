@@ -1,0 +1,187 @@
+﻿@{
+    ViewBag.Title = "登录";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section PageSpecificStyleSheetIncludes{
+<style type="text/css" >
+   *{font-family: "微软雅黑";font-size: 16px}
+    .banner{height: 149px;background-color: #229fe6;text-align: center}
+
+    .nav{height: 48px;background-color: #145976;text-align: center;}
+    .nav ul{list-style-type: none;text-align: center;margin-left: 10%}
+    .nav ul li{float: left;font-size: 1.2em;line-height: 48px;color: #ffffff;margin: 0 15px}
+    .nav ul li a{padding: 0 15px;color: #ffffff;text-decoration: none}
+    .nav ul li:hover{background-color: #b23232}
+
+    .content{background-color: #ffffff;height: 100%}
+    .content .bor{border: 1px solid #bcbcbc;border-radius: 15px;padding: 50px 10px;margin: 30px}
+    .content h3{text-align: center;margin: 20px auto !important;}
+    .content h5{color: red}
+    .content h5{margin-left: 30%}
+    .content p{margin-left: 30%}
+    .content .form-group{width: 305px;margin: 15px auto}
+    .content .form-group input{display: inline}
+    .content .form-control{width: 200px}
+    .content .next{width: 305px}
+    .content .space{height: 30px}
+
+
+    .foot{height: 150px;background-color: #229fe6;text-align: center;padding: 20px 0;color: #ffffff}
+
+    </style>
+}
+
+
+@section PageSpecificJavascriptIncludes{
+    <script type="text/javascript">
+        var stInt;
+
+        $(function () {
+            $("#vbtn").click(function () {
+
+                var dis = $("#txtMobile").attr("disabled");
+                if (dis != undefined && (dis == "disabled" || dis == true))
+                    return;
+
+                var str = $("#txtMobile").val();
+                var mb = str.replace(/(^\s*)|(\s*$)/g, "");
+
+                if (mb == null || mb == "") {
+                    jNotify('请输入手机号', { VerticalPosition: "center" });
+                    return;
+                }
+
+                var isMobile = /^(?:13\d|15\d)\d{5}(\d{3}|\*{3})$/;
+                if (!isMobile.test(mb)) {
+                    jNotify('请检查手机号码是否正确', { VerticalPosition: "center" });
+                    return;
+                }
+
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json",
+                    url: "/enter/GetSMS?mobile=" + mb,
+                    data: {},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.Code != 0) {
+
+                            $("#txtMobile").attr("disabled", false);
+                            $("#vbtn").attr("disabled", false);
+
+                            try { window.clearInterval(stInt); }
+                            catch (e) { }
+
+                            jError(data.Message);
+                        }
+                        else {
+
+                            $("#txtMobile").attr("disabled", true);
+                            $("#vbtn").attr("disabled", true);
+
+                            var i = 60;
+                            stInt = window.setInterval(function () {
+                                $("#vbtn").val("剩余(" + i + ")秒");
+                                i--;
+                                if (i < 0) {
+                                    window.clearInterval(stInt);
+                                    $("#vbtn").val("获取验证码");
+
+                                    $("#txtMobile").attr("disabled", false);
+                                    $("#vbtn").attr("disabled", false);
+                                }
+                            }, 1000);
+                        }
+                    }
+                });
+            });
+
+            $("#vbnext").click(function () {
+
+                var str = $("#txtMobile").val();
+                var mb = str.replace(/(^\s*)|(\s*$)/g, "");
+
+                if (mb == null || mb == "") {
+                    jNotify('请输入手机号', { VerticalPosition: "center" });
+                    return;
+                }
+
+                var strV = $("#txtVerfiy").val();
+                var mbV = strV.replace(/(^\s*)|(\s*$)/g, "");
+
+                if (mbV == null || mbV == "") {
+                    jNotify('请输入验证码', { VerticalPosition: "center" });
+                    return;
+                }
+
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json",
+                    url: "/enter/CheckSMS?mobile=" + mb + "&vercode=" + mbV,
+                    data: {},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.Code != 0) {
+
+                            $("#txtMobile").attr("disabled", false);
+                            $("#vbtn").attr("disabled", false);
+
+                            try { window.clearInterval(stInt); }
+                            catch (e) { }
+
+                            $("#vbtn").val("获取验证码");
+
+                            jError(data.Message);
+                        }
+                        else {
+                            window.location.href = "/enter/step2?id=" + data.Message;
+                        }
+                    }
+                });
+            });
+        });
+   </script>
+}
+
+  <div class="content">
+        <div class="container">
+            <div class="bor">
+                <h3>用户注册：填写账号信息</h3>
+                <p>填写手机号并验证</p>
+                <h5>*手机号将作为登录报名的账号，一个手机号同一次比赛只能报名一支队伍参加比赛</h5>
+                <div class="form-group">
+                    <input class="form-control" placeholder="请输入手机号码">
+                    <input type="button" id="btn" value="获取验证码" class="btn btn-primary"/>
+                    <!--验证码倒计时-->
+                    <script type="text/javascript">
+                        var wait = 3;
+                        function time(o) {
+                            if (wait == 0) {
+                                o.removeAttribute("disabled");
+                                o.value = "获取验证码";
+                                wait = 3;
+                            } else {
+
+                                o.setAttribute("disabled", true);
+                                o.value = "重新发送(" + wait + ")";
+                                wait--;
+                                setTimeout(function () {
+                                    time(o)
+                                },
+                                        1000)
+                            }
+                        }
+                        document.getElementById("btn").onclick = function () { time(this); }
+                    </script>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" placeholder="请输入验证码" >
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success next" onclick="javascript:window.location.href='sign_setpws.html'">下一步</button>
+                </div>
+            </div>
+        </div>
+    </div>

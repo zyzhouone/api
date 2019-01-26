@@ -1,0 +1,140 @@
+﻿@{
+    ViewBag.Title = "队伍名称";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageSpecificStyleSheetIncludes{
+<style type="text/css">
+    *{font-family: "微软雅黑";font-size: 16px}
+    .banner{height: 149px;background-color: #229fe6;text-align: center}
+
+    .nav{height: 48px;background-color: #145976;text-align: center;}
+    .nav ul{list-style-type: none;text-align: center;margin-left: 10%}
+    .nav ul li{float: left;font-size: 1.2em;line-height: 48px;color: #ffffff;margin: 0 15px}
+    .nav ul li a{padding: 0 15px;color: #ffffff;text-decoration: none}
+    .nav ul li:hover{background-color: #b23232}
+
+    .content{background-color: #ffffff;height: 100%}
+    .content .bor{border: 1px solid #bcbcbc;border-radius: 15px;padding: 50px 10px;margin: 30px}
+    .content h3{text-align: center;margin: 20px auto !important;}
+    .content h5{color: red}
+    .content h5{margin-left: 30%}
+    .content p{margin-left: 30%}
+    .content .form-group{width: 360px;margin: 15px auto}
+    .content .form-group input{display: inline}
+    .content .form-control{width: 200px}
+    .content .next{width: 360px}
+    .content .space{height: 30px}
+
+
+    .foot{height: 150px;background-color: #229fe6;text-align: center;padding: 20px 0;color: #ffffff}
+</style>
+}
+
+@section PageSpecificJavascriptIncludes{
+    <script type="text/javascript">
+        $(function () {
+            $("#cbtn").click(function () {
+
+                var str = $("#tname").val();
+                var mb = str.replace(/(^\s*)|(\s*$)/g, "");
+
+                if (mb == null || mb == "") {
+                    jNotify('请输入队伍名', { VerticalPosition: "center" });
+                    return;
+                }
+
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json",
+                    url: "/enter/CheckTname?matchid=" + $("#htid").val() + "&tname=" + escape(mb),
+                    data: {},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.Code != 0) {
+                            jError(data.Message);
+                        }
+                        else {
+                            jSuccess("恭喜，你可以使用这个名称", { VerticalPosition: "center" });
+                        }
+                    }
+                });
+            });
+
+            $("#nbtn").click(function () {
+
+                var str = $("#tname").val();
+                var mb = str.replace(/(^\s*)|(\s*$)/g, "");
+
+                if (mb == null || mb == "") {
+                    jNotify('请输入队伍名', { VerticalPosition: "center" });
+                    return;
+                }
+
+                var pwd = $("#txtpwd").val();
+                var npwd = $("#txtnpwd").val();
+
+                if (pwd != npwd) {
+                    jNotify('两次输入的密码不一致', { VerticalPosition: "center" });
+                    return;
+                }
+
+                var reg = /^[A-Za-z0-9]{6,16}$/;
+                if (!reg.test(pwd)) {
+                    jNotify('密码长度为6~16个字符，由数字及字母组成', { VerticalPosition: "center" });
+                    return;
+                }
+
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json",
+                    url: "/enter/RegTname?id=" + $("#hid").val() + "&tid=" + $("#htid").val() + "&tname=" + escape(mb) + "&tcom=" + escape($("#tcom").val())+"&pwd="+pwd,
+                    data: {},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.Code != 0) {
+                            jError(data.Message);
+                        }
+                        else {
+                            window.location.href = "/enter/step3?tid=" + data.Message;
+                        }
+                    }
+                });
+            });
+        });
+   </script>
+}
+
+<input id="hid" type="hidden" value="@ViewBag.id"/>
+<input id="htid" type="hidden"  value="6a61b95b-2d5d-4373-abaf-bf4e4c438900"/>
+
+<div class="content">
+        <div class="container">            
+            <div class="bor">
+                <h3>第二步：设定队伍名称</h3>
+                <p>设定队伍名称（六个中文字符以内）并验证队伍名称是否重复</p>
+                <h5>*觉得个人报名填公司名称有点多余，个人报名默认为个人，团体导入时可填公司名称</h5>
+                <div class="space"></div>
+                <div class="form-group">
+                    <input class="form-control" placeholder="请输入队伍名称" maxlength=6 id="tname">
+                    <button class="btn btn-primary" type="button" id="cbtn">队伍名是否重复?</button>
+                </div>
+                <div class="form-group" style="display:none;">
+                    <input class="form-control" placeholder="公司名称(非公司团队请填写[个人],如果空则代表个人)" style="width: 360px;" type="text" id="tcom">
+                </div>
+                <br/>
+                <br/>
+                <p>请设置密码</p>
+                <h5>*密码长度为6~16个字符，由数字及字母组成，不能包含空格</h5>
+                <div class="form-group">
+                    <input class="form-control" placeholder="请设置密码" type="password" id="txtpwd"/>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" placeholder="请再次输入密码" type="password" id="txtnpwd"/>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success next" type="button" id="nbtn">下一步</button>
+                </div>
+            </div>
+        </div>
+</div>

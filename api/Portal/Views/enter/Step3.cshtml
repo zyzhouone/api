@@ -1,0 +1,115 @@
+﻿@using Utls;
+@using Model;
+
+@{
+    ViewBag.Title = "选择路线";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model List<tblline>
+
+@section PageSpecificStyleSheetIncludes{
+<style>
+    *{font-family: "微软雅黑";font-size: 16px}
+    .banner{height: 149px;background-color: #229fe6;text-align: center}
+
+    .nav{height: 48px;background-color: #145976;text-align: center;}
+    .nav ul{list-style-type: none;text-align: center;margin-left: 10%}
+    .nav ul li{float: left;font-size: 1.2em;line-height: 48px;color: #ffffff;margin: 0 15px}
+    .nav ul li a{padding: 0 15px;color: #ffffff;text-decoration: none}
+    .nav ul li:hover{background-color: #b23232}
+
+    .content{background-color: #ffffff;height: 100%}
+    .content .bor{border: 1px solid #bcbcbc;border-radius: 15px;padding: 50px 10px;margin: 30px}
+    .content h3{text-align: center;margin: 20px auto !important;}
+    .content .form-group{width: 305px;margin: 15px auto}
+    .content .form-group input{display: inline}
+    .content .form-control{width: 200px}
+    .content .next{width: 150px}
+    .content .space{height: 30px}
+    .item{width: 100%;text-align: center;height: 100px}
+    .item ul{list-style-type: none;margin-left: 15%}
+    .item ul li{float: left;background-color: #2aabd2;padding: 5px 10px;color: white;margin: 10px}
+    .item ul li:hover{background-color: #1b6d85}
+    .text{width: 70%;height: 160px;background-color: #F9F9F9;border-radius: 10px;margin-left: 20%;border: 1px solid #f3f3f3;padding: 20px 20px}
+
+
+    .foot{height: 150px;background-color: #229fe6;text-align: center;padding: 20px 0;color: #ffffff}
+
+</style>
+}
+@section PageSpecificJavascriptIncludes{
+    <script type="text/javascript">
+
+        var lnn = "";
+
+        $(function () {
+            $("li").click(function () {
+
+                $("#ctt").html("<h5>" + this.innerText + "</h5><p>" + this.title + "</p>");
+
+                //alert($(this).html());
+
+                $(this).html("<span class='glyphicon glyphicon-ok'></span>" + this.innerText);
+                if (lnn != "") {
+                    $("#"+lnn).html($("#"+lnn).text());
+
+                }
+                lnn = this.id;
+            });
+
+            $("#nbtn").click(function () {
+
+                if (lnn == "") {
+                    jNotify('请输入路线', { VerticalPosition: "center" });
+                    return;
+                }
+
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json",
+                    url: "/enter/SelLine?tid=" + $("#htid").val() + "&lid=" + lnn.replace("lnn_", ""),
+                    data: {},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.Code != 0) {
+                            jError(data.Message);
+                        }
+                        else {
+                            window.location.href = "/enter/step4?tid=" + $("#htid").val();
+                        }
+                    }
+                });
+            });
+
+            $("#lul li:first").click();
+        });
+   </script>
+}
+
+<input id="htid" type="hidden" value="@ViewBag.tid"/>
+
+<div class="content">
+        <div class="container">
+            <div class="bor">
+                <h3>第三步：选择比赛线路类型</h3>
+                <div class="space"></div>
+                <div class="item">
+                    <h4>选择路线类型</h4>
+                    <ul id="lul">
+                        @foreach (var m in Model)
+                        { 
+                            <li title="@m.Content" id="lnn_@(m.Id)">@m.Name</li>
+                        }
+                    </ul>
+                </div>
+                <div class="text" id="ctt">
+                    <h5>亲自家庭</h5><p>3人一组，两成人一小孩，小孩年龄7~15岁，共200组。</p>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-warning next" onclick="javascript:window.history.go(-1);">返 回</button>
+                    <button class="btn btn-success next" type="button" id="nbtn">下一步</button>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,37 @@
+﻿@using Web;
+
+<div class="navbar-inner">
+	<div class="container-fluid">
+		<!-- BEGIN LOGO -->
+		<a class="brand" href="#">
+		<img src="@Url.Content("~/content/images/logo13.png")" alt="logo"/>
+		</a>
+		<!-- END LOGO -->
+		<!-- BEGIN RESPONSIVE MENU TOGGLER -->
+		<a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+		<img src="@Url.Content("~/assets/img/menu-toggler.png")" alt="" />
+		</a>  
+        <a class="brand" href="#">
+		<i></i>
+		</a>
+		<!-- END RESPONSIVE MENU TOGGLER -->				
+		<!-- BEGIN TOP NAVIGATION MENU -->					
+		<ul class="nav pull-right">
+			<!-- END TODO DROPDOWN -->
+			<!-- BEGIN USER LOGIN DROPDOWN -->
+			<li class="dropdown user">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+				<img alt="" src="@Url.Content("~/content/images/avatar.gif")" style="height:29px;" />
+				<span class="username">@UserLoginInfo.Get().Username</span>
+				<i class="icon-angle-down"></i>
+				</a>
+				<ul class="dropdown-menu">
+                    <li><a href="@Url.Action("ModifyPwd", "Account", new { Area = "Auth" })?TB_iframe=true&KeepThis=true&height=380&width=500" class="thickbox" title="修改密码"><i class="icon-key"></i> 修改密码</a></li>
+                    <li><a href="@Url.Action("Logout", "Account", new { Area = "Auth" })"><i class="icon-signout"></i> 退出</a></li>
+				</ul>
+			</li>
+			<!-- END USER LOGIN DROPDOWN -->
+		</ul>
+		<!-- END TOP NAVIGATION MENU -->	
+	</div>
+</div>

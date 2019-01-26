@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+	<meta charset="utf-8" />
+	<title>@ViewBag.Title 城市坐标管理平台</title>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+	<meta content="" name="description" />
+	<meta content="" name="author" />
+	@*@Styles.Render("~/assets/css")*@
+    <link href="@Url.Content("/assets/bootstrap/css/bootstrap.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/css/metro.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/bootstrap/css/bootstrap-responsive.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/font-awesome/css/font-awesome.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/css/style.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/css/style_responsive.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/css/style_default.css")" rel="stylesheet" id="style_color" />
+    <link href="@Url.Content("/assets/css/style_light.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/fancybox/source/jquery.fancybox.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/uniform/css/uniform.default.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/chosen-bootstrap/chosen/chosen.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/data-tables/DT_bootstrap.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/uniform/css/uniform.default.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/jquery-ui/jquery-ui-1.10.1.custom.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("/content/styles/admin.main.css")" rel="stylesheet" />
+     <link href="@Url.Content("/content/styles/jquery.thickbox.css")" rel="stylesheet" />
+
+    @RenderSection("PageSpecificStyleSheetIncludes", required: false)
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="fixed-top">
+	<!-- BEGIN HEADER -->
+	<div class="header navbar navbar-inverse navbar-fixed-top">
+		<!-- BEGIN TOP NAVIGATION BAR -->
+		@Html.Partial("_Header")
+		<!-- END TOP NAVIGATION BAR -->
+	</div>
+	<!-- END HEADER -->
+	<!-- BEGIN CONTAINER -->
+	<div class="page-container row-fluid">
+		<!-- BEGIN SIDEBAR -->
+		@Html.Partial("_Menu")
+		<!-- END SIDEBAR -->
+		<!-- BEGIN PAGE -->
+		<div class="page-content">
+			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+			<div id="portlet-config" class="modal hide">
+				<div class="modal-header">
+					<button data-dismiss="modal" class="close" type="button"></button>
+					<h3>portlet Settings</h3>
+				</div>
+				<div class="modal-body">
+					<p>Here will be a configuration form</p>
+				</div>
+			</div>
+			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+			<!-- BEGIN PAGE CONTAINER-->			
+			<div class="container-fluid">
+				<!-- BEGIN PAGE HEADER-->
+				<div class="row-fluid">
+					<div class="span12" id="navigation">
+						<!-- BEGIN STYLE CUSTOMIZER -->
+						@Html.Partial("_Theme")
+						<!-- END BEGIN STYLE CUSTOMIZER -->  
+						<!-- BEGIN PAGE TITLE & BREADCRUMB-->			
+						<h3 class="page-title">
+							<span>标题</span>　<small>介绍</small>
+						</h3>
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home"></i>
+								<span>首页</span> 
+								<i class="icon-angle-right"></i>
+							</li>
+							<li>
+								<span>菜单组</span>
+								<i class="icon-angle-right"></i>
+							</li>
+							<li><span>菜单</span></li>
+						</ul>
+						<!-- END PAGE TITLE & BREADCRUMB-->
+					</div>
+				</div>
+				<!-- END PAGE HEADER-->
+				<!-- BEGIN PAGE CONTENT-->				
+                @RenderBody()
+				<!-- END PAGE CONTENT-->
+			</div>
+			<!-- END PAGE CONTAINER-->
+		</div>
+		<!-- END PAGE -->
+	</div>
+	<!-- END CONTAINER -->
+	<!-- BEGIN FOOTER -->
+	@Html.Partial("_Footer")
+	<!-- END FOOTER -->
+	<!-- BEGIN JAVASCRIPTS -->
+    <script type="text/javascript">
+        var staticFileRoot = "/";
+	</script>
+	<!-- Load javascripts at bottom, this will reduce page load time -->
+    @Scripts.Render("~/assets/jq")
+	<!-- ie8 fixes -->
+	<!--[if lt IE 9]>
+	@Scripts.Render("~/assets/js/ie9")
+	<![endif]-->	
+    <script type="text/javascript" src="@Url.Content("~/assets/uniform/jquery.uniform.min.js")"></script>
+	@Scripts.Render("~/assets/js")	
+    	<script type="text/javascript" src="@Url.Content("~/assets/js/app.js")"></script>
+    
+    @Scripts.Render("~/assets/js2")	
+	<script type="text/javascript">
+	    jQuery(document).ready(function () {
+	        // initiate layout and plugins
+	        App.init();
+	    });
+	</script>
+    @RenderSection("PageSpecificJavascriptIncludes", required: false)
+</body>
+<!-- END BODY -->
+</html>

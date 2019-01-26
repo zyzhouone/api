@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MenuConfig>
+  <MenuGroups>
+    <MenuGroup name="系统菜单" url="/Auth/Login/Index" icon="icon-home" info="欢迎登录系统！">
+    </MenuGroup>
+    <MenuGroup name="赛事管理" icon="icon-filter">
+      <MenuArray>
+        <Menu name="区域维护" url="/Main/Position/Index" info="区域维护" permission=",1," />
+        <Menu name="赛事维护" url="/Main/Goods/Index" info="赛事管理" permission=",1," />
+        <Menu name="赛事举办维护" url="/Main/Common/Region" info="赛事运营管理" permission=",1," />
+      </MenuArray>
+    </MenuGroup>
+    <MenuGroup name="报名管理" icon="icon-leaf">
+      <MenuArray>
+	<Menu name="队伍管理" url="/Training/Training/TrainingQuery" info="参赛队伍管理" permission=",1,3,4,5,6,7,8," />
+        <Menu name="预报名维护" url="/Training/Training/TrainingQuery" info="预报名信息管理" permission=",1,3,4,5,6,7,8," />
+ 	<Menu name="团队报名管理" url="/Training/Training/TrainingQuery" info="团队报名维护" permission=",1,3,4,5,6,7,8," />
+	<Menu name="订单管理" url="/Training/Training/TrainingQuery" info="支付信息管理" permission=",1,3,4,5,6,7,8," /> 
+        <Menu name="报名维护" url="/Training/Training/TrainingQuery" info="参赛队员管理" permission=",1,3,4,5,6,7,8," /> 
+      </MenuArray>
+    </MenuGroup>
+    <MenuGroup name="发布管理" icon="icon-leaf">
+      <MenuArray>
+	<Menu name="网站内容" url="/Training/Training/TrainingQuery" info="网站内容维护" permission=",1,3,4,5,6,7,8," />
+        <Menu name="消息管理" url="/Training/Training/TrainingQuery" info="通知消息管理" permission=",1,3,4,5,6,7,8," />
+      </MenuArray>
+    </MenuGroup>
+    <MenuGroup name="会员管理" icon="icon-sitemap">
+      <MenuArray>
+        <Menu name="会员信息维护" url="/Test/Review/TrainSummary" info="注册用户管理" permission=",1,4,5," />
+	<Menu name="团队维护" url="/Test/Review/TrainSummary" info="团队用户管理" permission=",1,4,5," />
+      </MenuArray>
+    </MenuGroup>
+    <MenuGroup name="系统维护" icon="icon-filter">
+      <MenuArray>
+        <Menu name="用户维护" url="/Main/User/Index" info="添加修改删除用户" permission=",1," />
+	<Menu name="举办用户维护" url="/Main/User/Index" info="赛事用户维护" permission=",1," />
+      </MenuArray>
+    </MenuGroup>
+  </MenuGroups>
+</MenuConfig>
