@@ -343,3 +343,6 @@ api/Web/Web.config
 api/Web/Web.csproj
 api/Web/Web.Debug.config
 api/Web/Web.Release.config
+api/AppAPI/Web.config
+api/AppAPI/Web.Debug.config
+api/AppAPI/Web.Release.config
