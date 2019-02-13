@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="datacount.cs" />
     <Compile Include="autoid.cs" />
+    <Compile Include="dict.cs" />
     <Compile Include="group.cs" />
     <Compile Include="migration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1731,7 +1731,7 @@ namespace AppAPI.Controllers
         {
             //string ucode= HttpContext.Server.UrlEncode("E99d4WkoQJY7FRpyEYScAvVWHx5cn8tLX/sJxNg2+jYmZe9xKVchNqt/ukkjQo6m");
 
-            List<SelectListItem> dictMatch = new ApiBll().GetDict(20);
+            List<dict> dictMatch = new ApiBll().GetDict(20);
             string dictMatchid = "";
             if (dictMatch.Count == 1)
             {

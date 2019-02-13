@@ -8,7 +8,6 @@ using System.Data;
 using DAL;
 using Model;
 using Utls;
-using System.Web.Mvc;
 
 namespace BLL
 {
@@ -1871,7 +1870,7 @@ namespace BLL
         /// </summary>
         /// <param name="dictid"></param>
         /// <returns></returns>
-        public List<SelectListItem> GetDict(int dictid)
+        public List<dict> GetDict(int dictid)
         {
             using (var db = new BFdbContext())
             {
@@ -1880,7 +1879,7 @@ namespace BLL
 
                 sql.AppendFormat(" AND a.dictid = {0}", dictid);
 
-                return db.SqlQuery<SelectListItem>(sql.ToString()).ToList();
+                return db.SqlQuery<dict>(sql.ToString()).ToList();
             }
         }
     }
